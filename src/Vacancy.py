@@ -101,6 +101,22 @@ class Vacancy:
         else:
             raise ValueError('Сравнивать можно только две вакансии.')
 
+    @staticmethod
+    def get_filtered_vacancies(vacancies_list: list, filter_word: list) -> list:
+        """
+        Оставляет от списка вакансий только те, в которых встречаются ключевые слова
+        (если хотя бы одно ключевое слово есть в названии, городе, требованиях или обязанностях то ОК)
+        """
+        filtered_vacancies = []
+        for vacancy in vacancies_list:
+            for word in filter_word:
+                if (word in vacancy.name or
+                        word in vacancy.city or
+                        word in vacancy.requirement or
+                        word in vacancy.responsibility):
+                    filtered_vacancies.append(vacancy)
+        return filtered_vacancies
+
 
 vac1 = Vacancy("Парикмахер", "Москва", "https://hh.ru/vacancy/92918782",
                "ОТ ВАС: Опыт работы от 1 года. Умение выполнять мужские, женские, детские стрижки, окрашивания любой сложности, уходовые процедуры.",
@@ -111,9 +127,15 @@ vac2 = Vacancy("Прогер", "Москва", "https://hh.ru",
 # print(str(vac1))
 # print(str(vac2))
 
-print(vac1 < vac2)
-print(vac1 < vac1)
-print(vac2 < vac1)
+# print(vac1 < vac2)
+# print(vac1 < vac1)
+# print(vac2 < vac1)
+
+list_of_vac = [vac1,vac2]
+
+vac = Vacancy.get_filtered_vacancies(list_of_vac, ['прог'])
+for vacation in vac:
+    print(str(vacation))
 
 # hh_api = HeadHunterAPI()
 # hh_response = hh_api.get_vacancies("парикмахер")
