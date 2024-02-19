@@ -58,6 +58,8 @@ vacancies_from_hh = [
 ]
 
 
+
+
 @pytest.fixture
 def list_of_vacancies():
     list_of_vacancies = [vacancy1, vacancy2, vacancy3, vacancy4, vacancy5]
@@ -104,3 +106,19 @@ def test_get_vacancies_by_salary(list_of_vacancies):
     assert Vacancy.get_vacancies_by_salary(list_of_vacancies, 10000, 1000000) == [vacancy1, vacancy2, vacancy3, vacancy5]
     assert Vacancy.get_vacancies_by_salary(list_of_vacancies, 100000, 500000) == [vacancy5]
     assert Vacancy.get_vacancies_by_salary(list_of_vacancies, 100000, 200000) == []
+
+def test_get_sorted_vacancies(list_of_vacancies):
+    assert Vacancy.get_sorted_vacancies(list_of_vacancies) == [vacancy5, vacancy3, vacancy1, vacancy2, vacancy4]
+
+def test_get_top_vacancies(list_of_vacancies):
+    assert Vacancy.get_top_vacancies(Vacancy.get_sorted_vacancies(list_of_vacancies), 2) == [vacancy5, vacancy3]
+    assert Vacancy.get_top_vacancies(list_of_vacancies, 4) == [vacancy1, vacancy2, vacancy3, vacancy4]
+
+def test_cast_to_object_list():
+    assert Vacancy.cast_to_object_list(vacancies_from_hh)[0].name == 'python backend developer'
+    assert Vacancy.cast_to_object_list(vacancies_from_hh)[1].city == 'химки'
+    assert Vacancy.cast_to_object_list(vacancies_from_hh)[0].url == 'www.hh.ru/vacancy/92292859'
+    assert Vacancy.cast_to_object_list(vacancies_from_hh)[1].requirement == 'от 3 лет опыта работы в заведении на 30+ работников'
+    assert Vacancy.cast_to_object_list(vacancies_from_hh)[0].responsibility == 'не указано'
+    assert Vacancy.cast_to_object_list(vacancies_from_hh)[1].salary_from == 0
+    assert Vacancy.cast_to_object_list(vacancies_from_hh)[0].salary_to == 300000
