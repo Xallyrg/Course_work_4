@@ -1,4 +1,4 @@
-from src.HH_API import HeadHunterAPI
+# from src.HH_API import HeadHunterAPI
 
 
 class Vacancy:
@@ -110,10 +110,10 @@ class Vacancy:
         filtered_vacancies = []
         for vacancy in vacancies_list:
             for word in filter_word:
-                if (word in vacancy.name or
-                        word in vacancy.city or
-                        word in vacancy.requirement or
-                        word in vacancy.responsibility):
+                if (word.lower() in vacancy.name or
+                        word.lower() in vacancy.city or
+                        word.lower() in vacancy.requirement or
+                        word.lower() in vacancy.responsibility):
                     filtered_vacancies.append(vacancy)
         return filtered_vacancies
 
@@ -146,15 +146,58 @@ class Vacancy:
 
     @staticmethod
     def get_top_vacancies(vacancies_list: list, top_number: int) -> list:
-        """Формирует список из N позиций, в нашем случае, топ по зарплате"""
+        """
+        Формирует список из первых N позиций
+        (у нас это будет топ по зарплате, потому что будем применять после get_sorted_vacancies)
+        """
         return vacancies_list[0:top_number]
 
+    @classmethod
+    def cast_to_object_list(cls, hh_vacancies: list) -> list:
+        """
+        Создает список объектов-вакансий из данных, полученных через api.hh.ru
+        """
+        vacancies_list = []
+        for vacancy in hh_vacancies:
 
-vac1 = Vacancy("Парикмахер", "Москва", "https://hh.ru/vacancy/92918782",
-               "ОТ ВАС: Опыт работы от 1 года. Умение выполнять мужские, женские, детские стрижки, окрашивания любой сложности, уходовые процедуры.",
-               "РАБОТАЕМ НА МАТЕРИАЛАХ:", 2, 10)
-vac2 = Vacancy("Прогер", "Москва", "https://hh.ru",
-               "ОТ ВАС: Опыт работы от 100 лет.", "Ответсвенность", 1, 100)
+            name = vacancy["name"].lower()
+
+            city = vacancy["area"]["name"].lower()
+
+            url = vacancy["alternate_url"].lower()
+
+            try:
+                salary_from = int(vacancy["salary"]["from"])
+            except TypeError:
+                salary_from = 0
+
+            try:
+                salary_to = int(vacancy["salary"]["to"])
+            except TypeError:
+                salary_to = 0
+
+            requirement = vacancy["snippet"]["requirement"]
+            if requirement is None:
+                requirement = "не указано"
+            else:
+                requirement = requirement.lower()
+
+            responsibility = vacancy["snippet"]["responsibility"]
+            if responsibility is None:
+                responsibility = "не указано"
+            else:
+                responsibility = responsibility.lower()
+
+            current_vacancy = cls(name, city, url, requirement, responsibility, salary_from, salary_to)
+            vacancies_list.append(current_vacancy)
+        return vacancies_list
+
+
+# vac1 = Vacancy("Парикмахер", "Москва", "https://hh.ru/vacancy/92918782",
+#                "ОТ ВАС: Опыт работы от 1 года. Умение выполнять мужские, женские, детские стрижки, окрашивания любой сложности, уходовые процедуры.",
+#                "РАБОТАЕМ НА МАТЕРИАЛАХ:", 2, 10)
+# vac2 = Vacancy("Прогер", "Москва", "https://hh.ru",
+#                "ОТ ВАС: Опыт работы от 100 лет.", "Ответсвенность", 1, 100)
 # print(repr(vac))
 # print(str(vac1))
 # print(str(vac2))
@@ -163,7 +206,7 @@ vac2 = Vacancy("Прогер", "Москва", "https://hh.ru",
 # print(vac1 < vac1)
 # print(vac2 < vac1)
 
-list_of_vac = [vac1,vac2]
+# list_of_vac = [vac1,vac2]
 
 # vac = Vacancy.get_filtered_vacancies(list_of_vac, ['прог'])
 # for vacation in vac:
@@ -173,12 +216,20 @@ list_of_vac = [vac1,vac2]
 # for vacation in vac:
 #     print(str(vacation))
 
-vac = Vacancy.get_sorted_vacancies(list_of_vac)
-vac = Vacancy.get_top_vacancies(vac, 1)
-for vacation in vac:
-    print(str(vacation))
+# vac = Vacancy.get_sorted_vacancies(list_of_vac)
+# vac = Vacancy.get_top_vacancies(vac, 1)
+# for vacation in vac:
+#     print(str(vacation))
 
 # hh_api = HeadHunterAPI()
-# hh_response = hh_api.get_vacancies("парикмахер")
-# for vacancy in hh_response:
-#     print(vacancy)
+# hh_response = hh_api.get_vacancies("python")
+# list_of_vacancies = Vacancy.cast_to_object_list(hh_response)
+# list_of_vacancies = Vacancy.get_filtered_vacancies(list_of_vacancies, ['Москва'])
+# list_of_vacancies = Vacancy.get_vacancies_by_salary(list_of_vacancies, 150000, 100000000)
+# list_of_vacancies = Vacancy.get_sorted_vacancies(list_of_vacancies)
+# list_of_vacancies = Vacancy.get_top_vacancies(list_of_vacancies, 3)
+#
+# for vacancy in list_of_vacancies:
+#      print(str(vacancy))
+#
+# print(len(list_of_vacancies))
