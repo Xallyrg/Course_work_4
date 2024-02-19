@@ -117,6 +117,25 @@ class Vacancy:
                     filtered_vacancies.append(vacancy)
         return filtered_vacancies
 
+    @staticmethod
+    def get_vacancies_by_salary(vacancies_list: list, salary_from: int, salary_to: int):
+        """
+        Оставляет от списка вакансий только те, что подходят под диапозон зарплаты\
+        """
+        vacancies_by_salary = []
+        for vacancy in vacancies_list:
+            # Если обе границы попали
+            if (salary_from <= vacancy.salary_from <= salary_to and
+                  salary_from <= vacancy.salary_to <= salary_to):
+                vacancies_by_salary.append(vacancy)
+            # Если у вакансии нет нижней границы, но верхняя попала
+            elif vacancy.salary_from == 0 and salary_from <= vacancy.salary_to <= salary_to:
+                vacancies_by_salary.append(vacancy)
+            # Если у вакансии нет верхней границы, но нижняя попала
+            elif vacancy.salary_to == 0 and salary_from <= vacancy.salary_from <= salary_to:
+                vacancies_by_salary.append(vacancy)
+        return vacancies_by_salary
+
 
 vac1 = Vacancy("Парикмахер", "Москва", "https://hh.ru/vacancy/92918782",
                "ОТ ВАС: Опыт работы от 1 года. Умение выполнять мужские, женские, детские стрижки, окрашивания любой сложности, уходовые процедуры.",
@@ -133,7 +152,11 @@ vac2 = Vacancy("Прогер", "Москва", "https://hh.ru",
 
 list_of_vac = [vac1,vac2]
 
-vac = Vacancy.get_filtered_vacancies(list_of_vac, ['прог'])
+# vac = Vacancy.get_filtered_vacancies(list_of_vac, ['прог'])
+# for vacation in vac:
+#     print(str(vacation))
+
+vac = Vacancy.get_vacancies_by_salary(list_of_vac, 2,510)
 for vacation in vac:
     print(str(vacation))
 
