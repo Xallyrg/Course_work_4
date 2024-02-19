@@ -30,11 +30,11 @@ class Vacancy:
         :return:
         """
         return (f"{self.__class__.__name__}"
-                f"({self.name}, "
-                f"{self.city}, "
-                f"{self.url}, "
-                f"{self.requirement}, "
-                f"{self.responsibility}, "
+                f"('{self.name}', "
+                f"'{self.city}', "
+                f"'{self.url}', "
+                f"'{self.requirement}', "
+                f"'{self.responsibility}', "
                 f"{self.salary_from}, "
                 f"{self.salary_to})")
 
