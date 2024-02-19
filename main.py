@@ -75,9 +75,11 @@ top_vacancies = Vacancy.get_top_vacancies(sorted_vacancies, top_n)
 json_saver = JSONSaver()
 json_saver.add_to_file(PATH_TO_JSON_DATA, top_vacancies)
 
-# Выводим пользователю то что он просил
+# Выводим пользователю то что он просил (я вывожу через метод класса Vacancy потому что так красивее. Записываю в файл в формате JSON
 print("Ниже список вакансий, что вы искали")
-json_saver.read_file(PATH_TO_JSON_DATA)
+for vacancy in top_vacancies:
+    print(str(vacancy))
+# json_saver.read_file(PATH_TO_JSON_DATA)
 print("Найденные вакансии сохранены в файл vacancies.json")
 
 # Прощаемся с пользователем
