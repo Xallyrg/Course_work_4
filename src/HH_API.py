@@ -7,6 +7,7 @@ class BaseAPI(ABC):
     """
     абстрактный класс для работы с API сервиса с вакансиями
     """
+
     @abstractmethod
     def get_vacancies(self, vacancy_name):
         pass
@@ -18,6 +19,7 @@ class HeadHunterAPI(BaseAPI):
     :param BaseAPI:
     :return:
     """
+
     def get_vacancies(self, vacancy_name):
         params = {
             "text": f"NAME:{vacancy_name}",
@@ -28,7 +30,6 @@ class HeadHunterAPI(BaseAPI):
         hh_data = json.loads(response.text)
         hh_vacancies = hh_data["items"]
         return hh_vacancies
-
 
 # hh_api = HeadHunterAPI()
 # hh_response = hh_api.get_vacancies("парикмахер")
