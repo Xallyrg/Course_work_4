@@ -136,10 +136,23 @@ class Vacancy:
                 vacancies_by_salary.append(vacancy)
         return vacancies_by_salary
 
+    @staticmethod
+    def get_sorted_vacancies(unsorted_vacancies: list) -> list:
+        """
+        Сортирует список вакансий по уменьшению зарплаты
+        """
+        sorted_vacancies = sorted(unsorted_vacancies, reverse=True)
+        return sorted_vacancies
+
+    @staticmethod
+    def get_top_vacancies(vacancies_list: list, top_number: int) -> list:
+        """Формирует список из N позиций, в нашем случае, топ по зарплате"""
+        return vacancies_list[0:top_number]
+
 
 vac1 = Vacancy("Парикмахер", "Москва", "https://hh.ru/vacancy/92918782",
                "ОТ ВАС: Опыт работы от 1 года. Умение выполнять мужские, женские, детские стрижки, окрашивания любой сложности, уходовые процедуры.",
-               "РАБОТАЕМ НА МАТЕРИАЛАХ:", 1, 10)
+               "РАБОТАЕМ НА МАТЕРИАЛАХ:", 2, 10)
 vac2 = Vacancy("Прогер", "Москва", "https://hh.ru",
                "ОТ ВАС: Опыт работы от 100 лет.", "Ответсвенность", 1, 100)
 # print(repr(vac))
@@ -156,7 +169,12 @@ list_of_vac = [vac1,vac2]
 # for vacation in vac:
 #     print(str(vacation))
 
-vac = Vacancy.get_vacancies_by_salary(list_of_vac, 2,510)
+# vac = Vacancy.get_vacancies_by_salary(list_of_vac, 2,510)
+# for vacation in vac:
+#     print(str(vacation))
+
+vac = Vacancy.get_sorted_vacancies(list_of_vac)
+vac = Vacancy.get_top_vacancies(vac, 1)
 for vacation in vac:
     print(str(vacation))
 
